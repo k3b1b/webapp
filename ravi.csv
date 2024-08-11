@@ -1,0 +1,12 @@
+def fetch_file_from_s3(bucket_name, file_key):
+    obj = s3_client.get_object(Bucket=bucket_name, Key=file_key)
+    data = obj['Body'].read().decode('utf-8')
+    return pd.read_csv(pd.compat.StringIO(data))
+
+# Displaying the CSV Data
+if selected_file.endswith('.csv'):
+    df = fetch_file_from_s3(bucket_name, selected_file)
+    st.write(df)
+else:
+    file_content = fetch_file_from_s3(bucket_name, selected_file)
+    st.text_area("File Content", file_content, height=300)
